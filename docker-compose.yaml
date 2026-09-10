@@ -33,7 +33,9 @@ services:
       - service-network
 
   service2:
-    image: service2image
+    build:
+      context: ../../service2/demo
+      dockerfile: Dockerfile
     ports:
       - 8082:8082
     networks:
