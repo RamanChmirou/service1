@@ -21,6 +21,6 @@ public class KafkaSender {
     public void sendBookRented(Book book) {
         log.info("Send notification to topic: {}, with data: {}", rentedBooksTopic, book);
         kafkaTemplate.send(rentedBooksTopic, book);
-        new HashSet<>()a
+        new HashSet<>();
     }
 }

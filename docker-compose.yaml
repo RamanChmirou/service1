@@ -1,21 +1,21 @@
 version: '3'
 services:
-  #  service1:
-  #    build:
-  #      context: .
-  #      dockerfile: Dockerfile
-  #    ports:
-  #      - 8080:8080
-  #    networks:
-  #      - service-network
-  #    depends_on:
-  #      - mongo-db
-  #      - kafka
-  #    environment:
-  #      SPRING_DATA_MONGODB_URI: mongodb://mongo-db:27017/mongo
-  #      SPRING_DATA_MONGODB_DATABASE: mongo
-  #      SPRING_DATA_MONGODB_HOST: mongo-db
-  #      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+  service1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - service-network
+    depends_on:
+      - mongo-db
+      - kafka
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongo-db:27017/mongo
+      SPRING_DATA_MONGODB_DATABASE: mongo
+      SPRING_DATA_MONGODB_HOST: mongo-db
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
 
   mongo-db:
     image: mongo:latest
@@ -32,39 +32,39 @@ services:
     networks:
       - service-network
 
-  #  service2:
-  #    image: service2image
-  #    ports:
-  #      - 8082:8082
-  #    networks:
-  #      - service-network
-  #    depends_on:
-  #      - db
-  #    environment:
-  #      SERVER_PORT: 8082
-  #      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-  #      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgresql
-  #
-  #  db:
-  #    image: postgres
-  #    ports:
-  #      - 5432:5432
-  #    networks:
-  #      - service-network
-  #    environment:
-  #      POSTGRES_DB: postgresql
-  #      POSTGRES_USER: sa
-  #      POSTGRES_PASSWORD: sa
-  #    volumes:
-  #      - postgres-volume:/var/lib/postgresql/data
-  #
-  #  pgadmin4:
-  #    image: elestio/pgadmin:latest
-  #    environment:
-  #      PGADMIN_DEFAULT_EMAIL: mlodysobol@gmail.com
-  #      PGADMIN_DEFAULT_PASSWORD: 7jziw55w2
-  #    ports:
-  #      - 80:80
+  service2:
+    image: service2image
+    ports:
+      - 8082:8082
+    networks:
+      - service-network
+    depends_on:
+      - db
+    environment:
+      SERVER_PORT: 8082
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgresql
+
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    networks:
+      - service-network
+    environment:
+      POSTGRES_DB: postgresql
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: sa
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+
+  pgadmin4:
+    image: elestio/pgadmin:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: mlodysobol@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: 7jziw55w2
+    ports:
+      - 80:80
 
   mongo-express:
     image: mongo-express:1
@@ -81,29 +81,29 @@ services:
 
 
 
-#  zookeeper:
-#    image: confluentinc/cp-zookeeper:latest
-#    ports:
-#      - 2181:2181
-#    environment:
-#      ZOOKEEPER_CLIENT_PORT: 2181
-#      ZOOKEEPER_TICK_TIME: 2000
-#    networks:
-#      - service-network
-#
-#  kafka:
-#    image: confluentinc/cp-kafka:latest
-#    ports:
-#      - 9092:9092
-#    depends_on:
-#      - zookeeper
-#    environment:
-#      KAFKA_BROKER_ID: 1
-#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-#    networks:
-#      - service-network
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - service-network
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - 9092:9092
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - service-network
 
 volumes:
   postgres-volume:
