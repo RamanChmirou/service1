@@ -32,7 +32,11 @@ public class BookService {
     @Transactional
     public BookDto createBook(BookDto bookDto) {
         Book entity = bookMapper.toEntity(bookDto);
-        return bookMapper.toDto(bookRepository.save(entity));
+        Book savedBook = bookRepository.save(entity);
+        if (nonNull(savedBook.getBorrower()) && !savedBook.getBorrower().isEmpty()) {
+            kafkaSender.sendBookRented(savedBook);
+        }
+        return bookMapper.toDto(savedBook);
     }
 
     @Transactional
