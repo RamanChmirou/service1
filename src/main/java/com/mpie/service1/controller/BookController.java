@@ -35,5 +35,10 @@ public class BookController {
         log.info("Retrieved rent request for book: {} and client: {}", isbn, clientName);
         return bookService.rentBook(clientName, isbn);
     }
+    @PutMapping("/return")
+    public BookDto returnBook(@RequestParam String isbn) {
+        log.info("Retrieved return request for book: {}", isbn);
+        return bookService.returnBook(isbn);
+    }
 
 }
