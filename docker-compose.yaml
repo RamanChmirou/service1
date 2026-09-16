@@ -86,6 +86,45 @@ services:
     networks:
       - service-network
 
+  akhq:
+    image: tchiotludo/akhq
+    restart: unless-stopped
+    environment:
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            docker-kafka-server:
+              properties:
+                bootstrap.servers: "kafka:9092"
+    ports:
+      - 8083:8080
+    networks:
+      - service-network
+
+  pgadmin4:
+    image: elestio/pgadmin:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: chmirov2006@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: sobaka123
+    ports:
+      - 80:80
+    networks:
+      - service-network
+
+  mongo-express:
+    image: mongo-express:1
+    container_name: mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_URL: "mongodb://sa:123@mongo-db:27017/admin"
+      ME_CONFIG_BASICAUTH: "false"
+    depends_on:
+      - mongo-db
+    networks:
+      - service-network
+
+
 volumes:
   postgres-volume:
   mongo-data:

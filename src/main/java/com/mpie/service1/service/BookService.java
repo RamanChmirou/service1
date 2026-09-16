@@ -63,5 +63,4 @@ public class BookService {
         kafkaSender.sendBookRented(book);
         return bookMapper.toDto(book);
     }
-
 }
