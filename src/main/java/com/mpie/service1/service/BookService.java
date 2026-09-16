@@ -32,7 +32,11 @@ public class BookService {
     @Transactional
     public BookDto createBook(BookDto bookDto) {
         Book entity = bookMapper.toEntity(bookDto);
-        return bookMapper.toDto(bookRepository.save(entity));
+        Book savedBook = bookRepository.save(entity);
+        if (nonNull(savedBook.getBorrower()) && !savedBook.getBorrower().isEmpty()) {
+            kafkaSender.sendBookRented(savedBook);
+        }
+        return bookMapper.toDto(savedBook);
     }
 
     @Transactional
@@ -47,5 +51,16 @@ public class BookService {
         kafkaSender.sendBookRented(book);
         return bookMapper.toDto(book);
     }
-
+    @Transactional
+    public BookDto returnBook(String isbn) {
+        Book book = bookRepository.findById(isbn)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book with given isbn does not exist"));
+        if (book.getBorrower() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book with the given isbn is not currently rented.");
+        }
+        book.setBorrower(null);
+        bookRepository.save(book);
+        kafkaSender.sendBookRented(book);
+        return bookMapper.toDto(book);
+    }
 }
